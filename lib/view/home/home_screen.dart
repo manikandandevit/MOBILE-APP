@@ -31,16 +31,24 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     final provider = context.watch<HomeController>();
+    final userJson = AppStorage.getJson(AppStorage.keyUser);
+    final user = userJson == null ? null : User.fromJson(userJson);
     return Scaffold(
       appBar: buildAppBar(provider),
-      body: provider.loading ? Center(child: LogoLoader()) : SingleChildScrollView(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          children: [
-            BookingFeeCard(provider: provider,),
-            const SizedBox(height: 20),
-            buildGridMenu(provider),
-          ],
+      body: provider.loading ? Center(child: LogoLoader()) : RefreshIndicator(
+        color: Colors.blue,
+        onRefresh: ()async {
+          provider.fetchAdmission(user?.admissionId ?? '');
+        },
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            children: [
+              BookingFeeCard(provider: provider,),
+              const SizedBox(height: 20),
+              buildGridMenu(provider),
+            ],
+          ),
         ),
       ),
     );
@@ -126,23 +134,36 @@ class _HomeScreenState extends State<HomeScreen> {
           },
           child: Column(
             children: [
-              Container(
-                decoration: BoxDecoration(
-                  color: items[index].bgColor,
-                  borderRadius: BorderRadius.circular(24),
-                  boxShadow: const [
-                    BoxShadow(
-                      color: Colors.black12,
-                      blurRadius: 6,
+              Stack(
+                children: [
+                  Container(
+                    decoration: BoxDecoration(
+                      color: items[index].bgColor,
+                      borderRadius: BorderRadius.circular(24),
+                      boxShadow: const [
+                        BoxShadow(
+                          color: Colors.black12,
+                          blurRadius: 6,
+                        ),
+                      ],
                     ),
-                  ],
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 10),
-                  child: Image.asset(
-                    items[index].imagePath, width: 65,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 10),
+                      child: Image.asset(
+                        items[index].imagePath, width: 65,
+                      ),
+                    ),
                   ),
-                ),
+                  if(!isEnable)
+                  Positioned.fill(
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: Colors.grey.withOpacity(0.5),
+                        borderRadius: BorderRadius.circular(24),
+                      ),
+                    ),
+                  ),
+                ],
               ),
               const SizedBox(height: 8),
               Text(

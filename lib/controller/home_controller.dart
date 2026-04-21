@@ -1,4 +1,3 @@
-
 import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
@@ -12,7 +11,9 @@ class HomeController extends ChangeNotifier {
   late HomeServices homeServices;
   GetAdmissionData? getAdmission;
   bool loadingValue = false;
+
   GetAdmissionData? get getAdmissionValue => getAdmission;
+
   bool get loading => loadingValue;
   String schoolName = "";
   String schoolImage = "";
@@ -20,20 +21,29 @@ class HomeController extends ChangeNotifier {
   static const parentName = "";
   static const studentName = "";
   static const parentPhoneNumber = "";
-  File? selectedImage;
-  String? fileName;
+  File? selectedImage, selectProfile;
+  String? fileName, profileName, paymentMode;
+  DateTime? datePickerValue;
   bool uploadSuccess = false;
   final amount = TextEditingController();
+  final amountPaid = TextEditingController();
+  final chequeDetails = TextEditingController();
+  final datePicker = TextEditingController();
+  final messageCtrl = TextEditingController();
   final formkey = GlobalKey<FormState>();
 
-
-  HomeController(){
+  HomeController() {
     homeServices = HomeServices();
     loadUser();
   }
 
-  boolUploadSuccess(bool value){
+  boolUploadSuccess(bool value) {
     uploadSuccess = value;
+    notifyListeners();
+  }
+
+  boolPaymentMode(String value) {
+    paymentMode = value;
     notifyListeners();
   }
 
@@ -77,23 +87,37 @@ class HomeController extends ChangeNotifier {
 
   int getCurrentStep() {
     final status = getAdmissionValue?.admission?.status;
+    final onboarding = getAdmissionValue?.admission?.onboarding;
 
-    switch (status) {
-      case "link_sent" || "payment_pending":
-        return 1; // Booking Fee done
-
-      case "payment_verified":
-        return 2; // Registration done
-
-      case "form_submitted" || "student_details_entered":
-        return 3;
-
-      case "approved":
-        return 4; // Admission step
-
-      default:
-        return 0; // Nothing started
+    if (status == "link_sent") {
+      return 1;
     }
+
+    if (status == "payment_verified" || status == "payment_pending") {
+      return 2;
+    }
+
+    if (status == "form_submitted" || status == "student_details_entered") {
+      return 3;
+    }
+
+    if (status == "approved") {
+      if (onboarding?.isPickupAdded == true) {
+        return 7;
+      }
+
+      if (onboarding?.isProfileSetup == true) {
+        return 6;
+      }
+
+      if (onboarding?.isVerified == true) {
+        return 5;
+      }
+
+      return 4;
+    }
+
+    return 0;
   }
 
   Future<void> submitPayment() async {
@@ -120,9 +144,7 @@ class HomeController extends ChangeNotifier {
         amount.clear();
       }
       Fluttertoast.showToast(
-        msg: success
-            ? "Upload Success"
-            : "Upload Failed. Try again later",
+        msg: success ? "Upload Success" : "Upload Failed. Try again later",
         toastLength: Toast.LENGTH_SHORT,
         gravity: ToastGravity.BOTTOM,
       );
@@ -138,7 +160,134 @@ class HomeController extends ChangeNotifier {
     }
   }
 
+  Future<void> uploadProfileImage() async {
+    if (loadingValue) return;
+    if (selectProfile == null) {
+      Fluttertoast.showToast(
+        msg: "Please select screenshot",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+      );
+      return;
+    }
+    loadingValue = true;
+    notifyListeners();
+    try {
+      final success = await homeServices.uploadProfileImage(
+        admissionId: admissionId,
+        screenshot: selectProfile!,
+      );
+      uploadSuccess = success;
+      if (success) {
+        selectProfile = null;
+      }
+      Fluttertoast.showToast(
+        msg: success ? "Upload Success" : "Upload Failed. Try again later",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+      );
+    } catch (e) {
+      Fluttertoast.showToast(
+        msg: "Something went wrong",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+      );
+    } finally {
+      loadingValue = false;
+      notifyListeners();
+    }
+  }
+
+  Future<void> postConfirmStudentDetails() async {
+    loadingValue = true;
+    notifyListeners();
+    try {
+      final response = await homeServices.confirmStudentDetails(
+        admissionId: "${getAdmissionValue?.admission?.id}",
+      );
+      Fluttertoast.showToast(
+        msg: response == true
+            ? "Confirmed Success"
+            : "Confirmed Failed. Try again later",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+      );
+    } catch (e) {
+      debugPrint("Student Details Change Error: $e");
+      Fluttertoast.showToast(
+        msg: "Something went wrong",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+      );
+    } finally {
+      loadingValue = false;
+      notifyListeners();
+    }
+  }
+
+  Future<void> postRequestStudentDetailsChange({
+    required String message,
+  }) async {
+    loadingValue = true;
+    notifyListeners();
+    try {
+      final response = await homeServices.requestStudentDetailsChange(
+        admissionId: "${getAdmissionValue?.admission?.id}",
+        message: message,
+      );
+      Fluttertoast.showToast(
+        msg: response == true
+            ? "Confirmed Success"
+            : "Confirmed Failed. Try again later",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+      );
+    } catch (e) {
+      debugPrint("Student Details Change Error: $e");
+      Fluttertoast.showToast(
+        msg: "Something went wrong",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+      );
+    } finally {
+      loadingValue = false;
+      notifyListeners();
+    }
+  }
+
+  Future<void> offlinePaymentDetailsApi() async {
+    loadingValue = true;
+    notifyListeners();
+    try {
+      final response = await homeServices.offlinePaymentApi(
+        admissionId: "${getAdmissionValue?.admission?.id}",
+        paymentDate: "$datePickerValue",
+        paymentMode: '${paymentMode?.toLowerCase()}',
+        amount: amountPaid.text,
+        chequeDetails: chequeDetails.text
+      );
+      Fluttertoast.showToast(
+        msg: response == true
+            ? "Confirmed Success"
+            : "Confirmed Failed. Try again later",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+      );
+    } catch (e) {
+      debugPrint("Student Details Change Error: $e");
+      Fluttertoast.showToast(
+        msg: "Something went wrong",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+      );
+    } finally {
+      loadingValue = false;
+      notifyListeners();
+    }
+  }
+
   DateTime? lastBackPressed;
+
   Future<bool> onWillPop() async {
     final now = DateTime.now();
     if (lastBackPressed == null ||
@@ -158,6 +307,4 @@ class HomeController extends ChangeNotifier {
     if (value == null || value.isEmpty) return '';
     return value[0].toUpperCase() + value.substring(1);
   }
-
-
 }

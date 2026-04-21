@@ -11,14 +11,13 @@ import '../data/utils.dart';
 import '../routes/app_pages.dart';
 import '../widget/custom_button.dart';
 import '../widget/qrImage_download.dart';
+import 'booking_fee_amount_card_widget.dart';
 
 class BookingPayWithOnline extends StatelessWidget {
   const BookingPayWithOnline({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final String qrImageUrl =
-        "https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=SamplePaymentQR";
     return Scaffold(
       backgroundColor: AppColors.orangeShadeFour,
       appBar: AppBar(
@@ -55,105 +54,8 @@ class BookingPayWithOnline extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const SizedBox(height: 20,),
-                Container(
-                  width: kWidth,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(12),
-                    color: AppColors.white,
-                    border: Border.all(
-                        color: AppColors.greyShadeOne,
-                        width: 1
-                    ),
-                  ),
-                  child: Column(
-                    children: [
-                      const SizedBox(height: 15,),
-                      Center(
-                        child: Text(
-                          Strings.bookingFeeAmount,style: nunitoSans.copyWith(
-                            fontSize: 14,
-                            color: AppColors.greyShadeTwo,
-                            fontWeight: FontWeight.w400
-                        ),),
-                      ),
-                      const SizedBox(height: 10,),
-                      Center(
-                        child: Text("₹ ${provider.getAdmissionValue?.admission?.bookingFee ?? '---'}",
-                          style: nunito.copyWith(
-                            fontSize: 32,
-                            color: AppColors.black,
-                            fontWeight: FontWeight.w700
-                        ),),
-                      ),
-                      const SizedBox(height: 15,),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 12,right: 12,bottom: 20),
-                        child: Container(
-                          width: kWidth,
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(8),
-                              color: AppColors.greyShadeThree
-                          ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              const SizedBox(height: 10,),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  Text("${provider.getAdmissionValue?.admission?.studentName ?? '---'}",
-                                    style: nunitoSans.copyWith(
-                                      fontSize: 14,
-                                      color: AppColors.black,
-                                      fontWeight: FontWeight.w400
-                                  ),),
-                                  Text(
-                                    Strings.dot,style: nunitoSans.copyWith(
-                                      fontSize: 12,
-                                      color: AppColors.greyShadeTwo,
-                                      fontWeight: FontWeight.w400
-                                  ),),
-                                  Text(provider.formatLevel(
-                                          "${provider.getAdmissionValue?.admission?.level ?? '---'}"),
-                                  style: nunitoSans.copyWith(
-                                      fontSize: 14,
-                                      color: AppColors.black,
-                                      fontWeight: FontWeight.w400
-                                  ),),
-                                  Text(
-                                    Strings.dot,style: nunitoSans.copyWith(
-                                      fontSize: 12,
-                                      color: AppColors.greyShadeTwo,
-                                      fontWeight: FontWeight.w400
-                                  ),),
-                                  Text(
-                                    Strings.koraManGala,style: nunitoSans.copyWith(
-                                      fontSize: 14,
-                                      color: AppColors.black,
-                                      fontWeight: FontWeight.w400
-                                  ),),
-                                ],
-                              ),
-                              const SizedBox(height: 5,),
-                              Center(
-                                child: Text(
-                                  Strings.amountAdjustYourTotalFees,textAlign: TextAlign.center,style: nunitoSans.copyWith(
-                                    fontSize: 14,
-                                    color: AppColors.greyShadeTwo,
-                                    fontWeight: FontWeight.w400
-                                ),),
-                              ),
-                              const SizedBox(height: 10,),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
+                BookingFeeAmountCardWidget(),
                 const SizedBox(height: 20,),
-
                 Align(
                   alignment: Alignment.center,
                   child: Column(

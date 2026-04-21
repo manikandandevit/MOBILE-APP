@@ -9,10 +9,10 @@ class CustomTextFormField extends StatelessWidget {
   final InputBorder? focusedBorder, enabledBorder, errorBorder;
   final InputDecoration? decoration;
   final Widget? prefixIcon, suffixIcon;
-  final String? hintText;
+  final String? hintText, prefixText;
   final Color? fillColor, cursorColor, borderColor;
   final bool? filled, obscureText, readOnly;
-  final TextStyle? textStyle, hintStyle;
+  final TextStyle? textStyle, hintStyle, prefixStyle;
   final TextInputType? keyboardType;
   final TextEditingController controller;
   final FocusNode? focusNode;
@@ -42,6 +42,7 @@ class CustomTextFormField extends StatelessWidget {
         this.onChanged,
         this.prefixIcon,
         this.suffixIcon,
+        this.prefixText,
         this.focusedBorder,
         this.enabledBorder,
         this.errorBorder,
@@ -52,6 +53,7 @@ class CustomTextFormField extends StatelessWidget {
         this.borderColor,
         this.textStyle,
         this.hintStyle,
+        this.prefixStyle,
         this.obscureText,
         this.keyboardType,
         this.validator,
@@ -153,6 +155,8 @@ class CustomTextFormField extends StatelessWidget {
                   color: Colors.red, fontSize: 12, fontWeight: FontWeight.bold),
 
               prefixIcon: prefixIcon,
+              prefixText: prefixText,
+              prefixStyle: prefixStyle,
               suffixIcon: suffixIcon,
 
               // errorStyle: poppinsTextStyle.copyWith(fontSize: 10, color: AppColors.errorColor),

@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import '../../Core/Services/ServicesStorage/api_services.dart';
 import '../../Core/Services/ServicesStorage/app_storage.dart';
 import '../auth/loginflow/login.dart';
 
@@ -68,6 +69,7 @@ void showCupertinoLogoutDialog(BuildContext context) {
           child: const Text("Logout"),
           onPressed: () {
             AppStorage.logoutClear();
+            ApiService.logout();
             Navigator.pop(context);
             Navigator.push(context, MaterialPageRoute(builder: (_) => Login()));
           },

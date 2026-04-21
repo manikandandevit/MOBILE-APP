@@ -121,7 +121,7 @@ class _UploadScreenshotScreenState extends State<UploadScreenshotScreen> {
             const SizedBox(height: 30,),
             InkWell(
               onTap: () {
-                Navigator.pushReplacementNamed(context, Routes.PARENTHOMESCREENBAR);
+                Navigator.pushReplacementNamed(context, Routes.BOTTOMNAVIGATIONBAR);
                 provider.boolUploadSuccess(false);
               },
               child: CustomButton(
@@ -209,6 +209,11 @@ class _UploadScreenshotScreenState extends State<UploadScreenshotScreen> {
                   ),
                   const SizedBox(height: 30,),
                   CustomTextFormField(
+                    prefixIcon: Icon(
+                      Icons.currency_rupee,
+                      color: Colors.black,
+                      size: 16,
+                    ),
                     controller: provider.amount,
                     filled: true,
                     fillColor: AppColors.white,

@@ -18,6 +18,7 @@
         "get_storage",
         "google_fonts",
         "image_picker",
+        "intl",
         "path_provider",
         "permission_handler",
         "provider",
@@ -53,6 +54,15 @@
         "stream_channel",
         "test_api",
         "vector_math"
+      ]
+    },
+    {
+      "name": "intl",
+      "version": "0.20.2",
+      "dependencies": [
+        "clock",
+        "meta",
+        "path"
       ]
     },
     {

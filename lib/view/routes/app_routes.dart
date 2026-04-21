@@ -14,7 +14,11 @@ abstract class Routes {
   static const BOOKINGFEESCREEN = _Paths.BOOKINGFEESCREEN;
   static const UPLOADSCREENSHOTSCREEN = _Paths.UPLOADSCREENSHOTSCREEN;
   static const JOTFORMSCREEN = _Paths.JOTFORMSCREEN;
+  static const VERIFYDETAILSCREEN = _Paths.VERIFYDETAILSCREEN; 
   static const ADMISSIONUNDERREVIEWSCREEN = _Paths.ADMISSIONUNDERREVIEWSCREEN;
+  static const OFFLINEPAYMENT = _Paths.OFFLINEPAYMENT;
+  static const PROFILEVERIFYSCREEN = _Paths.PROFILEVERIFYSCREEN;
+  static const PICKUPDETAILSSCREEN = _Paths.PICKUPDETAILSSCREEN;
 
 }
 
@@ -31,6 +35,10 @@ abstract class _Paths {
   static const BOOKINGFEESCREEN = '/booking-fee-screen';
   static const UPLOADSCREENSHOTSCREEN = '/upload-screen-shot-screen';
   static const JOTFORMSCREEN = '/jot-form-screen';
+  static const VERIFYDETAILSCREEN = '/verify-detail-screen';
   static const ADMISSIONUNDERREVIEWSCREEN = '/admission-under-review';
+  static const OFFLINEPAYMENT = '/offline-payment';
+  static const PROFILEVERIFYSCREEN = '/profile-verify-screen';
+  static const PICKUPDETAILSSCREEN = '/pickup-details-screen';
 
 }
