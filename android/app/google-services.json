@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "148113345722",
+    "project_id": "bright-kid-bc3b0",
+    "storage_bucket": "bright-kid-bc3b0.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:148113345722:android:bdb93a3a695b68051ac683",
+        "android_client_info": {
+          "package_name": "com.example.bright_kid"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBJkk3_fiZOz7FYdAvuI2X9GDuk0u_DxwY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
